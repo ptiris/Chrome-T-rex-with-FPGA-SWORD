@@ -22,8 +22,8 @@
 module Top(
     output [7:0]SEGMENT,
     output [3:0]AN,
-    input PS2_data,         //ps2_data
-    input PS2_clk,          //ps2_clk
+    input ps2_data,         //ps2_data
+    input ps2_clk,          //ps2_clk
     input clk,
     input rstn,
     input JUMP,
@@ -50,7 +50,7 @@ module Top(
   wire refreshclk;            //clock for refreshing of VGA
   wire bgndclk;               //clock for moving of background
   wire obsclk;
-  //TODO:Set the Clock
+  //TODO:Set the Clock  
 
   wire [31:0]cclk;
   clk_div clkd0(
@@ -87,39 +87,47 @@ module Top(
     .clk_div(obsclk)
   );
 
+  clock_div  #(
+    5000000
+  )clkd5(
+    .clk(clk),
+    .clk_div(scoreclk)
+  );
+
+
   ////////////////////////////////BOTTOMS/////////////////////////////////
   wire rst;
   AntiJitter  #(8) ant0 (
     .clk(clk),
-    .SIGNAL(SW[1]),
+    .SIGNAL(enter),
     .AntiJitter_SIGNAL(rst)
   );
 
   wire jump;
   AntiJitter  #(8) ant1 (
     .clk(clk),
-    .SIGNAL(SW[2]),
+    .SIGNAL(up||space),
     .AntiJitter_SIGNAL(jump)
   );
 
   wire duck;
   AntiJitter  #(8) ant2 (
     .clk(clk),
-    .SIGNAL(SW[3]),
+    .SIGNAL(down),
     .AntiJitter_SIGNAL(duck)
   );
 
-  // wire up,left,right,enter;
-  // PS2  PS2_inst (
-  //   .clk(clk),
-  //   .rst(rstn),
-  //   .ps2_clk(ps2_clk),
-  //   .ps2_data(ps2_data),
-  //   .up(up),
-  //   .left(left),
-  //   .right(right),
-  //   .enter(enter)
-  // );
+  wire up,space,down,enter;
+  PS2  PS2_inst (
+    .clk(clk),
+    .rst(SW[4]),
+    .ps2_clk(ps2_clk),
+    .ps2_data(ps2_data),
+    .up(up),
+    .space(space),
+    .down(down),
+    .enter(enter)
+  );
 
   assign LED[4:2]={jump,duck,rst};  
   /////////////COLLISION DETECTION/////////////
@@ -243,15 +251,17 @@ module Top(
       vga_data<=rgb_BGND;
     end
   end
-
-  DispM dsp0(
-    .scan(cclk[18:17]),
-    .HEXS({4'b0000,ANISEL,2'b00,gamestate,OBSSEL}),
-    .point(1'b0),
-    .LES(1'b0),
+  ScoreCounter sc0(
+    .scoreclk(scoreclk),
+    .cclk(cclk),
+    .rst(rst),
+    .gamestate(gamestate),
     .AN(AN),
     .SEGMENT(SEGMENT)
-  );
+);
+
+  
+
 endmodule
 
  

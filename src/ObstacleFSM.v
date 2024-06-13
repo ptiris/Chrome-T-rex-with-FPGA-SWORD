@@ -23,9 +23,11 @@
 module ObstacleFSM(
         input rst,
         input [1:0]gamestate,
+        input animateclk,
         input ObstacleRunning,
         output logic [9:0]FinalWidth,
-        output logic [3:0]ObstacleSEL
+        output logic [3:0]ObstacleSEL,
+        output reg BirdSEL
     );
     localparam Bird = 4'b1000;
     localparam Cac1S = 4'b0100;//one small cactaceae
@@ -76,6 +78,21 @@ module ObstacleFSM(
 
     end
 
+    initial begin
+        BirdSEL<=1'b1;
+    end
+
+    always @(posedge animateclk or posedge rst) begin
+        if(rst)begin
+            BirdSEL<=1'b1;
+        end
+        else if(gamestate==Running)begin
+            BirdSEL<=~BirdSEL;
+        end
+        else begin
+            BirdSEL<=BirdSEL;
+        end
+    end
     assign ObstacleSEL=ObstacleSEL_TMP;
 endmodule
 

@@ -70,6 +70,7 @@ module DrawObstacle #(parameter initialY = 102)(
 
     ObstacleFSM  obfsm0 (
         .rst(rst),
+        .animateclk(animateclk),
         .gamestate(gamestate),
         .ObstacleRunning(ObstacleRunning),
         .ObstacleSEL(ObstacleSEL),
@@ -78,6 +79,7 @@ module DrawObstacle #(parameter initialY = 102)(
     ObstacleJudge  obj0 (
         .x(x),
         .y(y),
+        .gamestate(gamestate),
         .ObstacleX(ObstacleX),
         .ObstacleY(ObstacleY),
         .ObstacleSEL(ObstacleSEL),

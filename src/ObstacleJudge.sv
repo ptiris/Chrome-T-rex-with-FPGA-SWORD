@@ -26,6 +26,8 @@ module ObstacleJudge(
         input [9:0]ObstacleX,
         input [9:0]ObstacleY,
         input [3:0]ObstacleSEL,
+        input [1:0]gamestate,
+        input BirdSEL,
         input animateclk,
         output isemptyObstacle,
         output [11:0]rgb_Obstacle
@@ -116,7 +118,7 @@ module ObstacleJudge(
             Bird:begin
                 accurateX = ((y>=ObstacleY+BirdOffset)&&(y<=ObstacleY+ObstacleHeightB+BirdOffset));
                 accurateY = ((x>=ObstacleX)&&(x>=0)&&(x<=ScreenW)&&(x<=ObstacleX+ObstacleWidthBd));
-                if(animateclk)begin
+                if(animateclk&(gamestate == 2'b01))begin
                     rgb_Obstacle_FULL = rgb_BirdUp;
                 end
                 else rgb_Obstacle_FULL = rgb_BirdDown;
@@ -129,6 +131,6 @@ module ObstacleJudge(
         
     end
     
-    assign isemptyObstacle = (~(accurateX && accurateY)) || (rgb_Obstacle_FULL[3:0]!=4'hF);
+    assign isemptyObstacle = (~(accurateX && accurateY)) || (rgb_Obstacle_FULL[3:0]!=4'hF) || ((rgb_Obstacle_FULL[15:4]!=12'hFFF)&&(rgb_Obstacle_FULL[15:4]!=12'h555));
     assign rgb_Obstacle = rgb_Obstacle_FULL[15:4];
 endmodule
