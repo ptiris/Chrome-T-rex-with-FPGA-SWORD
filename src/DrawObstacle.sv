@@ -1,25 +1,3 @@
-`timescale 1us / 1ns
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 06/01/2024 10:06:28 PM
-// Design Name: 
-// Module Name: DrawObstacle
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module DrawObstacle #(parameter initialY = 102)(
         input clk,
         input bgndclk,

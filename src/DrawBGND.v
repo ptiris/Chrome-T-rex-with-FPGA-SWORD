@@ -1,27 +1,4 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 05/20/2024 10:58:21 PM
-// Design Name: 
-// Module Name: DrawBGND
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module DrawBGND #(
-    parameter ratio = 1,
     parameter initialY = 100
 )(
     input clk,

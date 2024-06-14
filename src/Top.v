@@ -1,24 +1,3 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:
-// Engineer:
-//
-// Create Date: 05/07/2024 05:32:46 AM
-// Design Name:
-// Module Name: Top
-// Project Name:
-// Target Devices:
-// Tool Versions:
-// Description:
-//
-// Dependencies:
-//
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 module Top(
     output [7:0]SEGMENT,
     output [3:0]AN,
@@ -39,7 +18,6 @@ module Top(
     output [4:0]LED
   );
 
-  localparam ratio = 1;
   localparam ScreenH = 9'd480;
   localparam ScreenW = 10'd640;
 
@@ -50,7 +28,6 @@ module Top(
   wire refreshclk;            //clock for refreshing of VGA
   wire bgndclk;               //clock for moving of background
   wire obsclk;
-  //TODO:Set the Clock  
 
   wire [31:0]cclk;
   clk_div clkd0(
@@ -130,10 +107,6 @@ module Top(
   );
 
   assign LED[4:2]={jump,duck,rst};  
-  /////////////COLLISION DETECTION/////////////
-
-  reg collision=0;              //signal for collision
-  //TODO:COLLISION DETECTION
 
   //state of the game
   wire [1:0]gamestate;
@@ -224,7 +197,8 @@ module Top(
   vgac vga0 (
          .vga_clk(pclk), .clrn(SW[0]), .d_in(vga_data), .row_addr(row_addr), .col_addr(col_addr), .r(r), .g(g), .b(b), .hs(hs), .vs(vs)
        );
-
+/////////////COLLISION DETECTION/////////////
+  reg collision=0;              //signal for collision
   always @(*) begin
     if(rst)begin
       collision<=0;
@@ -237,6 +211,7 @@ module Top(
     end
   end
 
+/////////////Color Painting/////////////
   always @(*) begin
     if(!isemptyDino)begin
       vga_data<=rgb_Dino;
@@ -251,16 +226,6 @@ module Top(
       vga_data<=rgb_BGND;
     end
   end
-  ScoreCounter sc0(
-    .scoreclk(scoreclk),
-    .cclk(cclk),
-    .rst(rst),
-    .gamestate(gamestate),
-    .AN(AN),
-    .SEGMENT(SEGMENT)
-);
-
-  
 
 endmodule
 

@@ -1,27 +1,4 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 05/26/2024 06:15:36 PM
-// Design Name: 
-// Module Name: DrawDino
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module DrawDino#(
-    parameter ratio = 1,
     parameter initialY = 102,
     parameter initialX = 10
 )(
