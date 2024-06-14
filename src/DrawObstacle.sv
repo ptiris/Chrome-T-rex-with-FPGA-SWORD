@@ -16,7 +16,7 @@ module DrawObstacle #(parameter initialY = 102)(
     logic   [9:0] y;
     assign x=xx;
     assign y=9'd480-yy;
-///////parameters settings/////////
+///////////parameters settings/////////////
     localparam UnBegin = 2'b00;
     localparam Running = 2'b01;
     localparam Dead = 2'b10;
@@ -33,18 +33,18 @@ module DrawObstacle #(parameter initialY = 102)(
 
     localparam BirdOffset = 60;
 
-    logic [9:0]FinalWidth;
-    logic [9:0]FinalHeight; 
+    logic [9:0]FinalWidth;      //the final width according to the animate state
+    logic [9:0]FinalHeight;     //the final height according to the animate state
 
-    logic signed [10:0]ObstacleX;
+    logic signed [10:0]ObstacleX;  
     logic [9:0]ObstacleY;
     logic [3:0]ObstacleSEL;
     logic ObstacleRunning;
     assign OBSSEL = ObstacleSEL;
 
-    logic accurateX;
+    logic accurateX;//the validity of X addr
     assign accurateX = (((ObstacleX + FinalWidth) > 0 ) && ( ObstacleX < ScreenW ) );
-    assign ObstacleRunning = obsclk | accurateX;
+    assign ObstacleRunning = obsclk | accurateX;   //If generate an obstacle
 
     ObstacleFSM  obfsm0 (
         .rst(rst),
@@ -66,18 +66,18 @@ module DrawObstacle #(parameter initialY = 102)(
         .animateclk(animateclk)
     );
     always @(posedge bgndclk or posedge rst) begin
-        if(rst)begin
+        if(rst)begin                        //reset the obstacle out of screen by adding an offset of ObstacleWidthS
             ObstacleX<=ScreenW + ObstacleWidthS;
             ObstacleY<=initialY;
         end
         else begin
             case (gamestate)
                 UnBegin: begin
-                    ObstacleX <= ScreenW + ObstacleWidthS;
+                    ObstacleX <= ScreenW + ObstacleWidthS;   //reset the obstacle out of screen by adding an offset of ObstacleWidthS
                     ObstacleY <= initialY;
                 end
                 Running:begin
-                    if(ObstacleRunning || accurateX)begin
+                    if(ObstacleRunning || accurateX)begin  //in running state obstacle begin moving with backgound
                         ObstacleX <= ObstacleX-1'b1;
                         ObstacleY <= ObstacleY;
                     end
@@ -86,7 +86,7 @@ module DrawObstacle #(parameter initialY = 102)(
                         ObstacleY <= ObstacleY;
                     end
                 end
-                Dead:begin
+                Dead:begin                              // in the dead state obstale stay the same
                     ObstacleX <= ObstacleX;
                     ObstacleY <= ObstacleY;
                 end

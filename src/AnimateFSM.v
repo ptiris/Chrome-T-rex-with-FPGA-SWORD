@@ -23,28 +23,28 @@ reg [3:0]AnimateSel;
   localparam DinoRunR = 4'b0111;
 
   always @(*) begin
-    if(rst)begin
+    if(rst)begin        //reset to default state
         AnimateSel<=4'b0000;
     end
 
     else begin
         case (gamestate)
-            UnBegin:begin
+            UnBegin:begin   //reset to default state
                 AnimateSel<=DinoDefault;
             end 
-            Dead:begin
+            Dead:begin      //when dead ,set to dead state
                AnimateSel<=DinoDead; 
             end
             Running:begin
-                if(~isOnGround)
+                if(~isOnGround)     //when jumping ,set to default state
                     AnimateSel<=DinoDefault;
                 else if(isLying)begin
-                    if(animateclk)
+                    if(animateclk)   //switching between left and right according to animate clock
                         AnimateSel<=DinoDuckL;
                     else AnimateSel<=DinoDuckR;
                 end
                 else begin
-                    if(animateclk)
+                    if(animateclk)   //switching between left and right according to animate clock
                         AnimateSel<=DinoRunL;
                     else AnimateSel<=DinoRunR; 
                 end

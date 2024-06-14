@@ -27,17 +27,17 @@ module ObstacleFSM(
     logic [3:0]ObstacleSEL_TMP;
 
     always @(posedge rst or posedge ObstacleRunning) begin
-        if(rst)begin
+        if(rst)begin                  //set the animate type to default
             ObstacleSEL_TMP<=Cac2B;
             FinalWidth<=ObstacleWidthM;
         end
         else begin
             case (gamestate)
-                UnBegin: begin
+                UnBegin: begin          //set the animate type to default and stay the same
                     ObstacleSEL_TMP <= ObstacleSEL;
                 end 
                 Running: begin
-                    case (ObstacleSEL)
+                    case (ObstacleSEL)      //change between diffrent types
                         Cac1S:begin ObstacleSEL_TMP <= Cac2B; FinalWidth<=9'd100;end
                         Cac2B:begin ObstacleSEL_TMP <= Cac1B; FinalWidth<=9'd50 ;end
                         Cac1B:begin ObstacleSEL_TMP <= Bird; FinalWidth<=9'd92;end
@@ -46,7 +46,7 @@ module ObstacleFSM(
                         default: begin ObstacleSEL_TMP <= Cac2B; FinalWidth<=9'd100;end
                     endcase
                 end
-                Dead: begin
+                Dead: begin         //stay the same when dead
                     ObstacleSEL_TMP <= ObstacleSEL;
                     FinalWidth<=FinalWidth;
                 end
@@ -55,7 +55,7 @@ module ObstacleFSM(
         end
 
     end
-
+    //change the animate of bird according to animateclk
     initial begin
         BirdSEL<=1'b1;
     end
