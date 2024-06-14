@@ -14,11 +14,11 @@ module DinoJudge(
   localparam DinoDuckWidth = 118;
   localparam DinoDuckHeight = 60;
 
-  logic acurateYR,acurateXR,acurateXD,acurateYD;
+  logic acurateYR,acurateXR,acurateXD,acurateYD;  //the valid data for different kind of animate.X and Y for X address and Y address.R for running state , D for ducking state.
   logic [13:0]totaddrRun;
-  assign totaddrRun = (x-DinoX)+(DinoY+DinoHeight-y-1'b1)*DinoWidth;
+  assign totaddrRun = (x-DinoX)+(DinoY+DinoHeight-y-1'b1)*DinoWidth;  //caculate the ROM addr for running state.
   logic [12:0]totaddrDuck ;
-  assign totaddrDuck = (x-DinoX)+(DinoY+DinoDuckHeight-y-1'b1)*DinoDuckWidth;
+  assign totaddrDuck = (x-DinoX)+(DinoY+DinoDuckHeight-y-1'b1)*DinoDuckWidth;//caculate the ROM addr for rucking state.
 
   logic [15:0]rgb_Run_Dead;
   logic [15:0]rgb_Run_Default;
@@ -33,7 +33,7 @@ module DinoJudge(
   localparam DinoDead = 4'b0001;
   localparam DinoRunL = 4'b0011;
   localparam DinoRunR = 4'b0111;
-
+//////////////READING DATA FROM ROM//////////////
   dist_mem_gen_1 dmg1 (
                    .a(totaddrRun), // input wire [13 : 0] a
                    .spo(rgb_Run_Dead)   // output wire [15 : 0] spo
@@ -63,12 +63,15 @@ module DinoJudge(
                    .a(totaddrDuck), // input wire [12 : 0] a
                    .spo(rgb_Duck_Right)   // output wire [15 : 0] spo
                  );
-
+///////////////CHECKING IF IT IS VALID///////////////
   assign  acurateYR = (y>=DinoY)&&(y<=(DinoY+DinoHeight));
   assign  acurateXR = (x>=DinoX)&&(x<=(DinoX+DinoWidth));
   assign  acurateYD = (y>=DinoY)&&(y<=(DinoY+DinoDuckHeight));
   assign  acurateXD = (x>=DinoX)&&(x<=(DinoX+DinoDuckWidth));
 
+  //Full is for RGB plus Alpha data
+  //part is only Alpha data
+  //desinging like these is only because always_comb block do not support part select
   logic [15:0]rgb_Dino_Full;
   logic [3:0]rgb_Run_Dead_part;
   logic [3:0]rgb_Run_Default_part;
@@ -83,7 +86,8 @@ module DinoJudge(
   assign rgb_Run_Right_part   = rgb_Run_Right[3:0];
   assign rgb_Duck_Left_part   = rgb_Duck_Left[3:0];
   assign rgb_Duck_Right_part  = rgb_Duck_Right[3:0];
-
+  
+// selecting the rgb and valid data according to Anime state
   always_comb begin
     case (AnimateSel)
       DinoDefault:

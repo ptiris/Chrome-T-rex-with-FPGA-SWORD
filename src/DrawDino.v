@@ -36,11 +36,11 @@ module DrawDino#(
     localparam Grav = 4;
     localparam initialV = 7'd40;
 
-    assign isOnGround = (DinoY == initialY);
-    assign isDead = (gamestate == 2'b10);
-    assign isLying = lying;
+    assign isOnGround = (DinoY == initialY);    //if Dino is on the gound
+    assign isDead = (gamestate == 2'b10);       //if Dino is dead
+    assign isLying = lying;                     //if Dino is ducking
 
-    AnimateFSM afsm0(
+    AnimateFSM afsm0(                           //determine the animate state of the dino
         .clk(clk),
         .rst(rst),
         .animateclk(animateclk),
@@ -51,7 +51,7 @@ module DrawDino#(
         .isLying(isLying)
     );
 
-    DinoJudge dnj0(
+    DinoJudge dnj0(                         //determine the rgb and valid data of current address for Dino
         .clk(clk),
         .rst(rst),
         .x(x),
@@ -64,7 +64,7 @@ module DrawDino#(
     );
 
     always @(posedge refreshclk or posedge rst) begin
-        if(rst)begin
+        if(rst)begin        //reset the velocity and position
             DinoY<=initialY;
             DinoX<=initialX;
             VerticalV<=0;
@@ -72,22 +72,22 @@ module DrawDino#(
         end
         else begin
             case (gamestate)
-                UnBegin:begin
+                UnBegin:begin//reset the velocity and position
                     DinoY<=initialY;
                     DinoX<=initialX;
                 end 
                 Dead: DinoY<=DinoY;
                 Running: begin
-                    if(onJumping) begin
-                        DinoY<=(VerticalV+DinoY);
-                        VerticalV<=VerticalV-Grav;
-                        if(DinoY==initialY && VerticalV<0)begin
+                    if(onJumping) begin         //if in the jumping process
+                        DinoY<=(VerticalV+DinoY);   //add Y according to physical relations
+                        VerticalV<=VerticalV-Grav;  //reduce vertical velocity according to graviation
+                        if(DinoY==initialY && VerticalV<0)begin //when back to gound , reset all.
                             onJumping<=0;
                             DinoY<=initialY;
                             VerticalV<=0;
                         end
                     end
-                    else if(jump)begin
+                    else if(jump)begin  //gaining jumping signal , change to onjumping state
                         onJumping<=1;
                         VerticalV<=initialV;
                     end
