@@ -8,14 +8,14 @@ module ObstacleFSM(
         output reg BirdSEL
     );
     localparam Bird = 4'b1000;
-    localparam Cac1S = 4'b0100;//one small cactaceae
-    localparam Cac1B = 4'b0101;//one big cactaceae
-    localparam Cac2S = 4'b0110;//two small cactaceae
-    localparam Cac2B = 4'b0111;//two big cactaceae
+    localparam Cac1S = 4'b0100;     //one small cactaceae
+    localparam Cac1B = 4'b0101;     //one big cactaceae
+    localparam Cac2S = 4'b0110;     //two small cactaceae
+    localparam Cac2B = 4'b0111;     //two big cactaceae
 
     localparam UnBegin = 2'b00;
     localparam Running = 2'b01;
-    localparam Dead = 2'b11;
+    localparam Dead = 2'b11;    
 
     localparam ObstacleWidthS = 50;
     localparam ObstacleWidthM = 100;
